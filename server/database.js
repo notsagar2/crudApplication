@@ -13,11 +13,17 @@
 // };
 const mongoose = require('mongoose');
 
-// suppress upcoming strictQuery change warning (you can toggle to false if desired)
 mongoose.set('strictQuery', true);
 
-const defaultLocalURI = 'mongodb://127.0.0.1:27017/bookcrud'; // local fallback
+const defaultLocalURI = 'mongodb://127.0.0.1:27017/bookcrud';
 const uri = process.env.MONGODB_URI || defaultLocalURI;
+
+console.log('🔍 Mongo connection source:', process.env.MONGODB_URI ? 'remote Atlas' : 'local fallback');
+if (process.env.MONGODB_URI) {
+  console.log('🔑 MONGODB_URI present (prefix):', process.env.MONGODB_URI.slice(0, 40) + '...'); // don't log full secret in prod
+} else {
+  console.log('⚠️  No MONGODB_URI env var, using local URI:', defaultLocalURI);
+}
 
 async function databaseConnection() {
   try {
@@ -34,3 +40,4 @@ async function databaseConnection() {
 }
 
 module.exports = databaseConnection;
+
